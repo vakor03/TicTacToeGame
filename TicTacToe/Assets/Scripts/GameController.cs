@@ -44,6 +44,7 @@ public class GameController : MonoBehaviour
         gameOverPanel.SetActive(false);
         _moveCount = 0;
         restartButton.SetActive(false);
+        SetPlayerColors(playerX, playerO);
     }
 
     public string PlayerSide => _playerSide;
@@ -89,6 +90,18 @@ public class GameController : MonoBehaviour
     private void ChangeSides()
     {
         _playerSide = (_playerSide == "X") ? "O" : "X";
+
+        switch (_playerSide)
+        {
+            case "X":
+                SetPlayerColors(playerX, playerO);
+                break;
+            case "O":
+                SetPlayerColors(playerO, playerX);
+                break;
+            default:
+                throw new ArgumentException();
+        }
     }
 
     private bool CheckForGameEnd(out bool isDraw)
@@ -142,6 +155,8 @@ public class GameController : MonoBehaviour
         {
             buttonList[i].text = String.Empty;
         }
+        SetPlayerColors(playerX, playerO);
+
     }
 
     private void SetBoardInteractable(bool toggle)
@@ -149,7 +164,6 @@ public class GameController : MonoBehaviour
         for (var i = 0; i < buttonList.Length; i++)
         {
             buttonList[i].GetComponentInParent<Button>().interactable = toggle;
-            buttonList[i].text = String.Empty;
         }
     }
 
