@@ -10,10 +10,14 @@ public class GameController : MonoBehaviour
     public TMP_Text[] buttonList;
     private string _playerSide;
 
+    public GameObject gameOverPanel;
+    public TMP_Text gameOverText;
+
     public void Awake()
     {
         SetGameControllerReferenceOnButtons();
         _playerSide = "X";
+        gameOverPanel.SetActive(false);
     }
 
     public string PlayerSide => _playerSide;
@@ -28,12 +32,33 @@ public class GameController : MonoBehaviour
 
     public void EndTurn()
     {
-        //Debug.Log("End Turn is not implemented");
+        //Debug.Log("End Turn is not implemented"); 
         if (CheckForWin())
         {
             GameOver();
         }
+        else
+        {
+            ChangeSides();
+        }
     }
+
+    private void GameOver()
+    {
+        for (var i = 0; i < buttonList.Length; i++)
+        {
+            buttonList[i].GetComponentInParent<Button>().interactable = false;
+        }
+
+        gameOverPanel.SetActive(true);
+        gameOverText.text = $"{_playerSide} Wins!";
+    }
+
+    private void ChangeSides()
+    {
+        _playerSide = (_playerSide == "X") ? "O" : "X";
+    }
+
     private bool CheckForWin()
     {
         bool CheckRow(int rowNum)
@@ -56,14 +81,7 @@ public class GameController : MonoBehaviour
                    buttonList[6].text == _playerSide;
         }
 
-        return CheckRow(0) || CheckRow(1) || CheckRow(2) || CheckColumn(0) || CheckColumn(1) || CheckColumn(2) || CheckDiagonals();
-    }
-
-    private void GameOver()
-    {
-        for (var i = 0; i < buttonList.Length; i++)
-        {
-            buttonList[i].GetComponentInParent<Button>().interactable = false;
-        }
+        return CheckRow(0) || CheckRow(1) || CheckRow(2) || CheckColumn(0) || CheckColumn(1) || CheckColumn(2) ||
+               CheckDiagonals();
     }
 }
