@@ -5,6 +5,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class Player
+{
+    public Image panel;
+    public TMP_Text text;
+}
+
+[Serializable]
+public class PlayerColor
+{
+    public Color panelColor;
+    public Color textColor;
+}
+
 public class GameController : MonoBehaviour
 {
     public TMP_Text[] buttonList;
@@ -15,12 +29,21 @@ public class GameController : MonoBehaviour
 
     private int _moveCount;
 
+    public GameObject restartButton;
+
+    public Player playerX;
+    public Player playerO;
+    public PlayerColor activePlayerColor;
+    public PlayerColor inactivePlayerColor;
+    
+
     public void Awake()
     {
         SetGameControllerReferenceOnButtons();
         _playerSide = "X";
         gameOverPanel.SetActive(false);
         _moveCount = 0;
+        restartButton.SetActive(false);
     }
 
     public string PlayerSide => _playerSide;
@@ -40,6 +63,7 @@ public class GameController : MonoBehaviour
         if (CheckForGameEnd(out bool isDraw))
         {
             GameOver(isDraw);
+            restartButton.SetActive(true);
         }
         else
         {
@@ -55,11 +79,8 @@ public class GameController : MonoBehaviour
             gameOverText.text = "It's a draw!";
             return;
         }
-        
-        for (var i = 0; i < buttonList.Length; i++)
-        {
-            buttonList[i].GetComponentInParent<Button>().interactable = false;
-        }
+
+        SetBoardInteractable(false);
 
         gameOverPanel.SetActive(true);
         gameOverText.text = $"{_playerSide} Wins!";
@@ -99,7 +120,7 @@ public class GameController : MonoBehaviour
             return true;
         }
 
-        if (_moveCount==9)
+        if (_moveCount == 9)
         {
             isDraw = true;
             return true;
@@ -107,5 +128,36 @@ public class GameController : MonoBehaviour
 
         isDraw = false;
         return false;
+    }
+
+    public void RestartGame()
+    {
+        _playerSide = "X";
+        _moveCount = 0;
+        restartButton.SetActive(false);
+        gameOverPanel.SetActive(false);
+
+        SetBoardInteractable(true);
+        for (var i = 0; i < buttonList.Length; i++)
+        {
+            buttonList[i].text = String.Empty;
+        }
+    }
+
+    private void SetBoardInteractable(bool toggle)
+    {
+        for (var i = 0; i < buttonList.Length; i++)
+        {
+            buttonList[i].GetComponentInParent<Button>().interactable = toggle;
+            buttonList[i].text = String.Empty;
+        }
+    }
+
+    private void SetPlayerColors(Player newPlayer, Player oldPlayer)
+    {
+        newPlayer.panel.color = activePlayerColor.panelColor;
+        newPlayer.text.color = activePlayerColor.textColor;
+        oldPlayer.panel.color = inactivePlayerColor.panelColor;
+        oldPlayer.text.color = inactivePlayerColor.textColor;
     }
 }
