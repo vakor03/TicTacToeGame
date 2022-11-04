@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 3803234000607185144}
   - component: {fileID: 2657117999552310123}
   - component: {fileID: 1385045835133601678}
-  - component: {fileID: 5609245878528430098}
+  - component: {fileID: 1166100784696261372}
   m_Layer: 5
   m_Name: GridSpace
   m_TagString: Untagged
@@ -257,8 +257,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2657117999552310123}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &5609245878528430098
+      m_Calls:
+      - m_Target: {fileID: 1166100784696261372}
+        m_TargetAssemblyTypeName: GridSpace, Assembly-CSharp
+        m_MethodName: SetSpace
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1166100784696261372
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,6 +279,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5872165782780637902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1a87a6cd4b073547b638cf0a03e067d, type: 3}
+  m_Script: {fileID: 11500000, guid: e924d1692688ef94a823d46aa2292bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 1385045835133601678}
+  buttonText: {fileID: 4392163236563260403}
+  playerSide: X
