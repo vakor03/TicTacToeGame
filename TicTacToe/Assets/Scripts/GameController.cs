@@ -13,11 +13,14 @@ public class GameController : MonoBehaviour
     public GameObject gameOverPanel;
     public TMP_Text gameOverText;
 
+    private int _moveCount;
+
     public void Awake()
     {
         SetGameControllerReferenceOnButtons();
         _playerSide = "X";
         gameOverPanel.SetActive(false);
+        _moveCount = 0;
     }
 
     public string PlayerSide => _playerSide;
@@ -32,10 +35,11 @@ public class GameController : MonoBehaviour
 
     public void EndTurn()
     {
+        _moveCount++;
         //Debug.Log("End Turn is not implemented"); 
-        if (CheckForWin())
+        if (CheckForGameEnd(out bool isDraw))
         {
-            GameOver();
+            GameOver(isDraw);
         }
         else
         {
@@ -43,8 +47,15 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void GameOver()
+    private void GameOver(bool isDraw)
     {
+        if (isDraw)
+        {
+            gameOverPanel.SetActive(true);
+            gameOverText.text = "It's a draw!";
+            return;
+        }
+        
         for (var i = 0; i < buttonList.Length; i++)
         {
             buttonList[i].GetComponentInParent<Button>().interactable = false;
@@ -59,7 +70,7 @@ public class GameController : MonoBehaviour
         _playerSide = (_playerSide == "X") ? "O" : "X";
     }
 
-    private bool CheckForWin()
+    private bool CheckForGameEnd(out bool isDraw)
     {
         bool CheckRow(int rowNum)
         {
@@ -81,7 +92,20 @@ public class GameController : MonoBehaviour
                    buttonList[6].text == _playerSide;
         }
 
-        return CheckRow(0) || CheckRow(1) || CheckRow(2) || CheckColumn(0) || CheckColumn(1) || CheckColumn(2) ||
-               CheckDiagonals();
+        if (CheckRow(0) || CheckRow(1) || CheckRow(2) || CheckColumn(0) || CheckColumn(1) || CheckColumn(2) ||
+            CheckDiagonals())
+        {
+            isDraw = false;
+            return true;
+        }
+
+        if (_moveCount==9)
+        {
+            isDraw = true;
+            return true;
+        }
+
+        isDraw = false;
+        return false;
     }
 }

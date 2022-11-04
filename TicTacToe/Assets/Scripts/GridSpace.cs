@@ -9,7 +9,7 @@ public class GridSpace : MonoBehaviour
     public Button button;
     public TMP_Text buttonText;
 
-    [SerializeField] private GameController _gameController;
+    public GameController _gameController;
 
     public void SetSpace()
     {

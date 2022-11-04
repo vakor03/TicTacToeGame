@@ -1225,8 +1225,8 @@ MonoBehaviour:
   - {fileID: 753970236}
   - {fileID: 1324739025}
   - {fileID: 1916427564}
-  gameOverPanel: {fileID: 0}
-  gameOverText: {fileID: 0}
+  gameOverPanel: {fileID: 1052021419}
+  gameOverText: {fileID: 1302256204}
 --- !u!4 &1207048393
 Transform:
   m_ObjectHideFlags: 0
