@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class Player
@@ -23,7 +24,6 @@ public class PlayerColor
 public class GameController : MonoBehaviour
 {
     public TMP_Text[] buttonList;
-    private string _playerSide;
 
     public GameObject gameOverPanel;
     public TMP_Text gameOverText;
@@ -40,17 +40,23 @@ public class GameController : MonoBehaviour
 
     public GameObject startInfo;
 
+    private string _playerSide;
+    private string _computerSide;
+    public bool playerMove;
+    public float delay;
+    private int _value;
+    
     public void Awake()
     {
         SetGameControllerReferenceOnButtons();
-        //_playerSide = "X";
         gameOverPanel.SetActive(false);
         _moveCount = 0;
         restartButton.SetActive(false);
-        //SetPlayerColors(playerX, playerO);
+        playerMove = true;
     }
 
     public string PlayerSide => _playerSide;
+    public string ComputerSide => _computerSide;
 
     public void SetGameControllerReferenceOnButtons()
     {
@@ -65,10 +71,12 @@ public class GameController : MonoBehaviour
         _playerSide = startingSide;
         if (_playerSide=="X")
         {
+            _computerSide = "O";
             SetPlayerColors(playerX, playerO);
         }
         else
         {
+            _computerSide = "X";
             SetPlayerColors(playerO, playerX);
         }
         
@@ -78,10 +86,9 @@ public class GameController : MonoBehaviour
     public void EndTurn()
     {
         _moveCount++;
-        //Debug.Log("End Turn is not implemented"); 
-        if (CheckForGameEnd(out bool isDraw))
+        if (CheckForGameEnd(out bool isDraw, out string side))
         {
-            GameOver(isDraw);
+            GameOver(isDraw, side);
             restartButton.SetActive(true);
         }
         else
@@ -90,7 +97,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void GameOver(bool isDraw)
+    private void GameOver(bool isDraw, string winningSide)
     {
         if (isDraw)
         {
@@ -103,19 +110,20 @@ public class GameController : MonoBehaviour
         SetBoardInteractable(false);
 
         gameOverPanel.SetActive(true);
-        gameOverText.text = $"{_playerSide} Wins!";
+        gameOverText.text = $"{winningSide} Wins!";
     }
 
     private void ChangeSides()
     {
-        _playerSide = (_playerSide == "X") ? "O" : "X";
+    //    _playerSide = (_playerSide == "X") ? "O" : "X";
+        playerMove = playerMove ? false : true;
 
-        switch (_playerSide)
+        switch (playerMove)
         {
-            case "X":
+            case true:
                 SetPlayerColors(playerX, playerO);
                 break;
-            case "O":
+            case false:
                 SetPlayerColors(playerO, playerX);
                 break;
             default:
@@ -123,32 +131,42 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private bool CheckForGameEnd(out bool isDraw)
+    private bool CheckForGameEnd(out bool isDraw, out string side)
     {
-        bool CheckRow(int rowNum)
+        side = String.Empty;
+        bool CheckRow(int rowNum, string playerSide)
         {
-            return buttonList[rowNum * 3].text == _playerSide && buttonList[rowNum * 3 + 1].text == _playerSide &&
-                   buttonList[rowNum * 3 + 2].text == _playerSide;
+            return buttonList[rowNum * 3].text == playerSide && buttonList[rowNum * 3 + 1].text == playerSide &&
+                   buttonList[rowNum * 3 + 2].text == playerSide;
         }
 
-        bool CheckColumn(int colNum)
+        bool CheckColumn(int colNum, string playerSide)
         {
-            return buttonList[colNum].text == _playerSide && buttonList[colNum + 3].text == _playerSide &&
-                   buttonList[colNum + 6].text == _playerSide;
+            return buttonList[colNum].text == playerSide && buttonList[colNum + 3].text == playerSide &&
+                   buttonList[colNum + 6].text == playerSide;
         }
 
-        bool CheckDiagonals()
+        bool CheckDiagonals(string playerSide)
         {
-            return buttonList[0].text == _playerSide && buttonList[4].text == _playerSide &&
-                   buttonList[8].text == _playerSide ||
-                   buttonList[2].text == _playerSide && buttonList[4].text == _playerSide &&
-                   buttonList[6].text == _playerSide;
+            return buttonList[0].text == playerSide && buttonList[4].text == playerSide &&
+                   buttonList[8].text == playerSide ||
+                   buttonList[2].text == playerSide && buttonList[4].text == playerSide &&
+                   buttonList[6].text == playerSide;
         }
 
-        if (CheckRow(0) || CheckRow(1) || CheckRow(2) || CheckColumn(0) || CheckColumn(1) || CheckColumn(2) ||
-            CheckDiagonals())
+        if (CheckRow(0, _playerSide) || CheckRow(1, _playerSide) || CheckRow(2, _playerSide) || CheckColumn(0, _playerSide) || CheckColumn(1, _playerSide) || CheckColumn(2, _playerSide) ||
+            CheckDiagonals(_playerSide))
         {
             isDraw = false;
+            side = _playerSide;
+            return true;
+        }
+ 
+        if (CheckRow(0, _computerSide) || CheckRow(1,_computerSide) || CheckRow(2,_computerSide) || CheckColumn(0,_computerSide) || CheckColumn(1,_computerSide) || CheckColumn(2,_computerSide) ||
+            CheckDiagonals(_computerSide))
+        {
+            isDraw = false;
+            side = _computerSide;
             return true;
         }
 
@@ -164,7 +182,6 @@ public class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-       // _playerSide = "X";
         _moveCount = 0;
         restartButton.SetActive(false);
         gameOverPanel.SetActive(false);
@@ -176,8 +193,8 @@ public class GameController : MonoBehaviour
         SetPlayerButtons(true);
         SetPlayerColorsInactive();
         startInfo.SetActive(true);
-       // SetPlayerColors(playerX, playerO);
-
+        playerMove = true;
+        delay = 10;
     }
 
     private void StartGame()
@@ -215,5 +232,24 @@ public class GameController : MonoBehaviour
         playerO.text.color = inactivePlayerColor.textColor;
         playerX.panel.color = inactivePlayerColor.panelColor;
         playerX.text.color = inactivePlayerColor.textColor;
+    }
+
+    private void Update()
+    {
+        if (playerMove==false)
+        {
+            delay += delay * Time.deltaTime;
+            if (delay >= 100)
+            {
+                _value = Random.Range(0, 8);
+                if (buttonList[_value].GetComponentInParent<Button>().interactable == true)
+                {
+                    buttonList[_value].text = ComputerSide;
+                    buttonList[_value].GetComponentInParent<Button>().interactable = false;
+                    delay = 10;
+                    EndTurn();
+                }
+            }
+        }
     }
 }
