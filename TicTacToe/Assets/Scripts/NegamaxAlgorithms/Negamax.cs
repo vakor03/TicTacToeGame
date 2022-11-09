@@ -1,10 +1,12 @@
 ﻿using System;
 
-namespace Negamax
+namespace NegamaxAlgorithms
 {
     public class Negamax : INegamax
     {
         private string AILetter;
+
+        private string PlayerLetter;
 
         public Negamax(string aiLetter, string playerLetter)
         {
@@ -12,24 +14,7 @@ namespace Negamax
             PlayerLetter = playerLetter;
         }
 
-        private string PlayerLetter;
-        private static bool HasMovesLeft(Board board)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (board[i,j]=="")
-                    {
-                        return true;
-                    }
-                }
-            }
 
-            return false;
-        }
-
-        
         public Move FindBestTurn(Board board)
         {
             int bestVal = -1000;
@@ -46,7 +31,7 @@ namespace Negamax
                     {
                         board[i, j] = AILetter;
                         
-                        int moveVal = EvaluateBoard(board, 0, 1);
+                        int moveVal = -1*EvaluateBoard(board, 1, -1);
  
                        
                         board[i, j] = "";
@@ -62,6 +47,22 @@ namespace Negamax
             }
 
             return bestMove;
+        }
+
+        private static bool HasMovesLeft(Board board)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (board[i,j]=="")
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private int EvaluateBoard(Board board, int depth, int color)

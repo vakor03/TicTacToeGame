@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using NegamaxAlgorithms;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Negamax = NegamaxAlgorithms.Negamax;
 using Random = UnityEngine.Random;
 
 [Serializable]
@@ -45,6 +45,8 @@ public class GameController : MonoBehaviour
     public bool playerMove;
     public float delay;
     private int _value;
+
+    private INegamax _negamax;
     
     public void Awake()
     {
@@ -53,6 +55,8 @@ public class GameController : MonoBehaviour
         _moveCount = 0;
         restartButton.SetActive(false);
         playerMove = true;
+       // _negamax = new Negamax(ComputerSide, PlayerSide);
+
     }
 
     public string PlayerSide => _playerSide;
@@ -79,7 +83,7 @@ public class GameController : MonoBehaviour
             _computerSide = "X";
             SetPlayerColors(playerO, playerX);
         }
-        
+        _negamax = new Negamax(ComputerSide, PlayerSide);
         StartGame();
     }
 
@@ -240,16 +244,21 @@ public class GameController : MonoBehaviour
         if (playerMove==false)
         {
             delay += delay * Time.deltaTime;
-            if (delay >= 100)
+            if (delay >= 40)
             {
-                _value = Random.Range(0, 8);
-                if (buttonList[_value].GetComponentInParent<Button>().interactable == true)
-                {
-                    buttonList[_value].text = ComputerSide;
-                    buttonList[_value].GetComponentInParent<Button>().interactable = false;
-                    delay = 10;
-                    EndTurn();
-                }
+                var bestMove = _negamax.FindBestTurn(buttonList);
+                _value = bestMove.row * 3 + bestMove.col;
+                buttonList[_value].text = ComputerSide;
+                buttonList[_value].GetComponentInParent<Button>().interactable = false;
+                EndTurn();
+                //_value = Random.Range(0, 8);
+                // if (buttonList[_value].GetComponentInParent<Button>().interactable == true)
+                // {
+                //     buttonList[_value].text = ComputerSide;
+                //     buttonList[_value].GetComponentInParent<Button>().interactable = false;
+                //     delay = 10;
+                //     EndTurn();
+                // }
             }
         }
     }
