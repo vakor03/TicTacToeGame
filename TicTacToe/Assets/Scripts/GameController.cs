@@ -136,6 +136,7 @@ public class GameController : MonoBehaviour
         side = String.Empty;
         bool CheckRow(int rowNum, string playerSide)
         {
+           
             return buttonList[rowNum * 3].text == playerSide && buttonList[rowNum * 3 + 1].text == playerSide &&
                    buttonList[rowNum * 3 + 2].text == playerSide;
         }
