@@ -238,7 +238,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0, g: 0.8, b: 0.8, a: 1}
     m_HighlightedColor: {r: 0.5019608, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.2, g: 0.4, b: 0.4, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0, g: 0.8, b: 0.8, a: 1}
     m_DisabledColor: {r: 0.21568628, g: 0.25882354, b: 0.3019608, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -284,4 +284,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 1385045835133601678}
   buttonText: {fileID: 4392163236563260403}
-  playerSide: X

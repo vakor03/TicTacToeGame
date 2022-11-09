@@ -3,7 +3,6 @@ using NegamaxAlgorithms;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Negamax = NegamaxAlgorithms.Negamax;
 
 [Serializable]
 public class Player
@@ -49,16 +48,15 @@ public class GameController : MonoBehaviour
         SetGameControllerReferenceOnButtons();
         gameOverPanel.SetActive(false);
         restartButton.SetActive(false);
-        playerMove = true;
         //_negamax = new Negamax();
         _negamax = new NegamaxAlphaBetaPruning();
         _gameBoard = new Board();
     }
 
     public string PlayerSide => _playerSide;
-    public string ComputerSide => _computerSide;
+    private string ComputerSide => _computerSide;
 
-    public void SetGameControllerReferenceOnButtons()
+    private void SetGameControllerReferenceOnButtons()
     {
         for (var i = 0; i < buttonList.Length; i++)
         {
@@ -73,11 +71,13 @@ public class GameController : MonoBehaviour
         {
             _computerSide = "O";
             SetPlayerColors(playerX, playerO);
+            playerMove = true;
         }
         else
         {
             _computerSide = "X";
             SetPlayerColors(playerO, playerX);
+            playerMove = false;
         }
 
         _negamax.ComputerSide = _computerSide;
@@ -128,7 +128,7 @@ public class GameController : MonoBehaviour
 
     private void ChangeSides()
     {
-        playerMove = playerMove ? false : true;
+        playerMove = !playerMove;
 
         switch (playerMove)
         {
@@ -145,52 +145,6 @@ public class GameController : MonoBehaviour
 
     private bool CheckForGameEnd(out bool isDraw, out string side)
     {
-        // side = String.Empty;
-        // bool CheckRow(int rowNum, string playerSide)
-        // {
-        //    
-        //     return buttonList[rowNum * 3].text == playerSide && buttonList[rowNum * 3 + 1].text == playerSide &&
-        //            buttonList[rowNum * 3 + 2].text == playerSide;
-        // }
-        //
-        // bool CheckColumn(int colNum, string playerSide)
-        // {
-        //     return buttonList[colNum].text == playerSide && buttonList[colNum + 3].text == playerSide &&
-        //            buttonList[colNum + 6].text == playerSide;
-        // }
-        //
-        // bool CheckDiagonals(string playerSide)
-        // {
-        //     return buttonList[0].text == playerSide && buttonList[4].text == playerSide &&
-        //            buttonList[8].text == playerSide ||
-        //            buttonList[2].text == playerSide && buttonList[4].text == playerSide &&
-        //            buttonList[6].text == playerSide;
-        // }
-        //
-        // if (CheckRow(0, _playerSide) || CheckRow(1, _playerSide) || CheckRow(2, _playerSide) || CheckColumn(0, _playerSide) || CheckColumn(1, _playerSide) || CheckColumn(2, _playerSide) ||
-        //     CheckDiagonals(_playerSide))
-        // {
-        //     isDraw = false;
-        //     side = _playerSide;
-        //     return true;
-        // }
-        //
-        // if (CheckRow(0, _computerSide) || CheckRow(1,_computerSide) || CheckRow(2,_computerSide) || CheckColumn(0,_computerSide) || CheckColumn(1,_computerSide) || CheckColumn(2,_computerSide) ||
-        //     CheckDiagonals(_computerSide))
-        // {
-        //     isDraw = false;
-        //     side = _computerSide;
-        //     return true;
-        // }
-        //
-        // if (_moveCount == 9)
-        // {
-        //     isDraw = true;
-        //     return true;
-        // }
-        //
-        // isDraw = false;
-        // return false;
         isDraw = _gameBoard.State == Board.GameState.Draw;
         _gameBoard.CheckForWin(out side);
         return _gameBoard.State != Board.GameState.NotFinished;
@@ -204,7 +158,6 @@ public class GameController : MonoBehaviour
         SetPlayerButtons(true);
         SetPlayerColorsInactive();
         startInfo.SetActive(true);
-        playerMove = true;
         delay = 0;
 
         for (var i = 0; i < buttonList.Length; i++)

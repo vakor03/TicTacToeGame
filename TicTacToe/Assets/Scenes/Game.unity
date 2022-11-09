@@ -628,7 +628,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 330}
-  m_SizeDelta: {x: 200, y: 60}
+  m_SizeDelta: {x: 220, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &308085011 stripped
 MonoBehaviour:
@@ -913,7 +913,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'X or O
 
-    Choose a Side!'
+    X are the first to move'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2099,7 +2099,7 @@ MonoBehaviour:
     textColor: {r: 0, g: 0.8, b: 0.8, a: 1}
   startInfo: {fileID: 167827902}
   playerMove: 1
-  delay: 10
+  delay: 0
 --- !u!4 &1207048393
 Transform:
   m_ObjectHideFlags: 0
