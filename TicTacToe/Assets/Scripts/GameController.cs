@@ -4,21 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[Serializable]
-public class Player
-{
-    public Image panel;
-    public TMP_Text text;
-    public Button button;
-}
-
-[Serializable]
-public class PlayerColor
-{
-    public Color panelColor;
-    public Color textColor;
-}
-
 public class GameController : MonoBehaviour
 {
     public TMP_Text[] buttonList;
@@ -49,7 +34,8 @@ public class GameController : MonoBehaviour
         gameOverPanel.SetActive(false);
         restartButton.SetActive(false);
         //_negamax = new Negamax();
-        _negamax = new NegamaxAlphaBetaPruning();
+        _negamax = new NegaScout();
+       // _negamax = new NegamaxAlphaBetaPruning();
         _gameBoard = new Board();
     }
 

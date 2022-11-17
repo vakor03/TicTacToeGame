@@ -2,9 +2,9 @@
 
 namespace NegamaxAlgorithms
 {
-    public class NegamaxAlphaBetaPruning: INegamax
+    public class NegamaxAlphaBetaPruning : INegamax
     {
-         public string ComputerSide { get; set; }
+        public string ComputerSide { get; set; }
         public string PlayerSide { get; set; }
 
         public Move FindBestTurn(Board board)
@@ -24,7 +24,7 @@ namespace NegamaxAlgorithms
                     {
                         board[i, j] = ComputerSide;
 
-                        int moveVal = -1 * EvaluateBoard(board, 1, -1,int.MinValue, int.MaxValue );
+                        int moveVal = -1 * EvaluateBoard(board, 1, -1, int.MinValue, int.MaxValue);
 
 
                         board[i, j] = "";
@@ -60,11 +60,11 @@ namespace NegamaxAlgorithms
                         board[i, j] = color == 1 ? ComputerSide : PlayerSide;
 
                         value = Math.Max(value, -1 * EvaluateBoard(board,
-                            depth + 1, color * -1, -1*beta, -1*alpha));
+                            depth + 1, color * -1, -1 * beta, -1 * alpha));
 
                         board[i, j] = "";
                         alpha = Math.Max(alpha, value);
-                        if (alpha>=beta)
+                        if (alpha >= beta)
                         {
                             break;
                         }
